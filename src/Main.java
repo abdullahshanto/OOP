@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 abstract class Employee {
     private String name;
@@ -18,7 +19,6 @@ abstract class Employee {
         return id;
     }
 
-    // Abstract method to be implemented by subclasses
     public abstract double calculateSalary();
 
     @Override
@@ -82,29 +82,94 @@ class PayrollSystem {
     }
 
     public void displayEmployees() {
+        if (employeeList.isEmpty()) {
+            System.out.println("No employees to display.");
+            return;
+        }
         for (Employee employee : employeeList) {
             System.out.println(employee);
         }
+    }
+
+    public boolean isEmpty() {
+        return employeeList.isEmpty();
     }
 }
 
 public class Main {
     public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
         PayrollSystem payrollSystem = new PayrollSystem();
 
-        FullTimeEmployee emp1 = new FullTimeEmployee("John Doe", 101, 5000.0);
-        PartTimeEmployee emp2 = new PartTimeEmployee("Jane Smith", 102, 30, 15.0);
+        while (true) {
+            System.out.println("\n--- Payroll System ---");
+            System.out.println("1. Add Full-Time Employee");
+            System.out.println("2. Add Part-Time Employee");
+            System.out.println("3. Remove Employee");
+            System.out.println("4. Display All Employees");
+            System.out.println("5. Exit");
+            System.out.print("Enter your choice: ");
 
-        payrollSystem.addEmployee(emp1);
-        payrollSystem.addEmployee(emp2);
+            int choice = scanner.nextInt();
+            scanner.nextLine();
 
-        System.out.println("Initial Employee Details:");
-        payrollSystem.displayEmployees();
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter name: ");
+                    String name = scanner.nextLine();
+                    System.out.print("Enter id: ");
+                    int id = scanner.nextInt();
+                    scanner.nextLine();
+                    System.out.print("Enter monthly salary: ");
+                    double monthlySalary = scanner.nextDouble();
+                    scanner.nextLine();
+                    payrollSystem.addEmployee(new FullTimeEmployee(name, id, monthlySalary));
+                    System.out.println("Full-time employee added.");
+                    break;
 
-        System.out.println("\nRemoving Employee...");
-        payrollSystem.removeEmployee(101);
+                case 2:
+                    System.out.print("Enter name: ");
+                    String ptName = scanner.nextLine();
+                    System.out.print("Enter id: ");
+                    int ptId = scanner.nextInt();
+                    scanner.nextLine();
+                    System.out.print("Enter hours worked: ");
+                    int hoursWorked = scanner.nextInt();
+                    scanner.nextLine();
+                    System.out.print("Enter hourly rate: ");
+                    double hourlyRate = scanner.nextDouble();
+                    scanner.nextLine();
+                    payrollSystem.addEmployee(new PartTimeEmployee(ptName, ptId, hoursWorked, hourlyRate));
+                    System.out.println("Part-time employee added.");
+                    break;
 
-        System.out.println("\nRemaining Employee Details:");
-        payrollSystem.displayEmployees();
+                case 3:
+                    if (payrollSystem.isEmpty()) {
+                        System.out.println("No employees to remove.");
+                        break;
+                    }
+                    System.out.print("Enter id of employee to remove: ");
+                    int removeId = scanner.nextInt();
+                    scanner.nextLine();
+                    payrollSystem.removeEmployee(removeId);
+                    System.out.println("Employee removed (if existed).");
+                    break;
+
+                case 4:
+                    System.out.println("\nEmployee Details:");
+                    payrollSystem.displayEmployees();
+                    break;
+
+                case 5:
+                    System.out.println("Exiting...");
+                    scanner.close();
+                    System.exit(0);
+                    break;
+
+                default:
+                    System.out.println("Invalid choice. Try again.");
+                    break;
+            }
+        }
     }
 }
