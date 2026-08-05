@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -68,17 +69,14 @@ class PayrollSystem {
         employeeList.add(employee);
     }
 
-    public void removeEmployee(int id) {
-        Employee employeeToRemove = null;
+    public boolean removeEmployee(int id) {
         for (Employee employee : employeeList) {
             if (employee.getId() == id) {
-                employeeToRemove = employee;
-                break;
+                employeeList.remove(employee);
+                return true;
             }
         }
-        if (employeeToRemove != null) {
-            employeeList.remove(employeeToRemove);
-        }
+        return false;
     }
 
     public void displayEmployees() {
@@ -97,8 +95,9 @@ class PayrollSystem {
 }
 
 public class Main {
+    private static Scanner scanner = new Scanner(System.in);
+
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
         PayrollSystem payrollSystem = new PayrollSystem();
 
         while (true) {
@@ -110,66 +109,149 @@ public class Main {
             System.out.println("5. Exit");
             System.out.print("Enter your choice: ");
 
-            int choice = scanner.nextInt();
-            scanner.nextLine();
+            int choice = readInt();
+            if (choice == -1) {
+                continue;
+            }
 
             switch (choice) {
                 case 1:
-                    System.out.print("Enter name: ");
-                    String name = scanner.nextLine();
-                    System.out.print("Enter id: ");
-                    int id = scanner.nextInt();
-                    scanner.nextLine();
-                    System.out.print("Enter monthly salary: ");
-                    double monthlySalary = scanner.nextDouble();
-                    scanner.nextLine();
-                    payrollSystem.addEmployee(new FullTimeEmployee(name, id, monthlySalary));
-                    System.out.println("Full-time employee added.");
+                    addFullTimeEmployee(payrollSystem);
                     break;
-
                 case 2:
-                    System.out.print("Enter name: ");
-                    String ptName = scanner.nextLine();
-                    System.out.print("Enter id: ");
-                    int ptId = scanner.nextInt();
-                    scanner.nextLine();
-                    System.out.print("Enter hours worked: ");
-                    int hoursWorked = scanner.nextInt();
-                    scanner.nextLine();
-                    System.out.print("Enter hourly rate: ");
-                    double hourlyRate = scanner.nextDouble();
-                    scanner.nextLine();
-                    payrollSystem.addEmployee(new PartTimeEmployee(ptName, ptId, hoursWorked, hourlyRate));
-                    System.out.println("Part-time employee added.");
+                    addPartTimeEmployee(payrollSystem);
                     break;
-
                 case 3:
-                    if (payrollSystem.isEmpty()) {
-                        System.out.println("No employees to remove.");
-                        break;
-                    }
-                    System.out.print("Enter id of employee to remove: ");
-                    int removeId = scanner.nextInt();
-                    scanner.nextLine();
-                    payrollSystem.removeEmployee(removeId);
-                    System.out.println("Employee removed (if existed).");
+                    removeEmployee(payrollSystem);
                     break;
-
                 case 4:
                     System.out.println("\nEmployee Details:");
                     payrollSystem.displayEmployees();
                     break;
-
                 case 5:
                     System.out.println("Exiting...");
                     scanner.close();
                     System.exit(0);
                     break;
-
                 default:
-                    System.out.println("Invalid choice. Try again.");
+                    System.out.println("Invalid choice. Please enter a number between 1 and 5.");
                     break;
             }
+        }
+    }
+
+    private static int readInt() {
+        try {
+            int value = scanner.nextInt();
+            scanner.nextLine();
+            return value;
+        } catch (InputMismatchException e) {
+            System.out.println("Error: Please enter a valid integer.");
+            scanner.nextLine();
+            return -1;
+        }
+    }
+
+    private static double readDouble() {
+        try {
+            double value = scanner.nextDouble();
+            scanner.nextLine();
+            return value;
+        } catch (InputMismatchException e) {
+            System.out.println("Error: Please enter a valid number.");
+            scanner.nextLine();
+            return Double.NaN;
+        }
+    }
+
+    private static void addFullTimeEmployee(PayrollSystem payrollSystem) {
+        System.out.print("Enter name: ");
+        String name = scanner.nextLine().trim();
+        if (name.isEmpty()) {
+            System.out.println("Error: Name cannot be empty.");
+            return;
+        }
+
+        System.out.print("Enter id: ");
+        int id = readInt();
+        if (id == -1) {
+            return;
+        }
+        if (id < 0) {
+            System.out.println("Error: ID cannot be negative.");
+            return;
+        }
+
+        System.out.print("Enter monthly salary: ");
+        double monthlySalary = readDouble();
+        if (Double.isNaN(monthlySalary)) {
+            return;
+        }
+        if (monthlySalary < 0) {
+            System.out.println("Error: Salary cannot be negative.");
+            return;
+        }
+
+        payrollSystem.addEmployee(new FullTimeEmployee(name, id, monthlySalary));
+        System.out.println("Full-time employee added.");
+    }
+
+    private static void addPartTimeEmployee(PayrollSystem payrollSystem) {
+        System.out.print("Enter name: ");
+        String name = scanner.nextLine().trim();
+        if (name.isEmpty()) {
+            System.out.println("Error: Name cannot be empty.");
+            return;
+        }
+
+        System.out.print("Enter id: ");
+        int id = readInt();
+        if (id == -1) {
+            return;
+        }
+        if (id < 0) {
+            System.out.println("Error: ID cannot be negative.");
+            return;
+        }
+
+        System.out.print("Enter hours worked: ");
+        int hoursWorked = readInt();
+        if (hoursWorked == -1) {
+            return;
+        }
+        if (hoursWorked < 0) {
+            System.out.println("Error: Hours worked cannot be negative.");
+            return;
+        }
+
+        System.out.print("Enter hourly rate: ");
+        double hourlyRate = readDouble();
+        if (Double.isNaN(hourlyRate)) {
+            return;
+        }
+        if (hourlyRate < 0) {
+            System.out.println("Error: Hourly rate cannot be negative.");
+            return;
+        }
+
+        payrollSystem.addEmployee(new PartTimeEmployee(name, id, hoursWorked, hourlyRate));
+        System.out.println("Part-time employee added.");
+    }
+
+    private static void removeEmployee(PayrollSystem payrollSystem) {
+        if (payrollSystem.isEmpty()) {
+            System.out.println("No employees to remove.");
+            return;
+        }
+        System.out.print("Enter id of employee to remove: ");
+        int id = readInt();
+        if (id == -1) {
+            return;
+        }
+        if (payrollSystem.removeEmployee(id)) {
+            System.out.println("Employee removed.");
+        } else {
+            System.out.println("Employee with id " + id + " not found.");
         }
     }
 }
