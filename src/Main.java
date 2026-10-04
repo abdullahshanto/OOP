@@ -238,20 +238,4 @@ public class Main {
         System.out.println("Part-time employee added.");
     }
 
-    private static void removeEmployee(PayrollSystem payrollSystem) {
-        if (payrollSystem.isEmpty()) {
-            System.out.println("No employees to remove.");
-            return;
-        }
-        System.out.print("Enter id of employee to remove: ");
-        int id = readInt();
-        if (id == -1) {
-            return;
-        }
-        if (payrollSystem.removeEmployee(id)) {
-            System.out.println("Employee removed.");
-        } else {
-            System.out.println("Employee with id " + id + " not found.");
-        }
-    }
-}
+ 
