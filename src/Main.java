@@ -152,48 +152,4 @@ public class Main {
         }
     }
 
-    private static double readDouble() {
-        try {
-            double value = scanner.nextDouble();
-            scanner.nextLine();
-            return value;
-        } catch (InputMismatchException e) {
-            System.out.println("Error: Please enter a valid number.");
-            scanner.nextLine();
-            return Double.NaN;
-        }
-    }
-
-    private static void addFullTimeEmployee(PayrollSystem payrollSystem) {
-        System.out.print("Enter name: ");
-        String name = scanner.nextLine().trim();
-        if (name.isEmpty()) {
-            System.out.println("Error: Name cannot be empty.");
-            return;
-        }
-
-        System.out.print("Enter id: ");
-        int id = readInt();
-        if (id == -1) {
-            return;
-        }
-        if (id < 0) {
-            System.out.println("Error: ID cannot be negative.");
-            return;
-        }
-
-        System.out.print("Enter monthly salary: ");
-        double monthlySalary = readDouble();
-        if (Double.isNaN(monthlySalary)) {
-            return;
-        }
-        if (monthlySalary < 0) {
-            System.out.println("Error: Salary cannot be negative.");
-            return;
-        }
-
-        payrollSystem.addEmployee(new FullTimeEmployee(name, id, monthlySalary));
-        System.out.println("Full-time employee added.");
-    }
-
  
