@@ -204,15 +204,5 @@ public class Main {
             return;
         }
 
-        System.out.print("Enter id: ");
-        int id = readInt();
-        if (id == -1) {
-            return;
-        }
-        if (id < 0) {
-            System.out.println("Error: ID cannot be negative.");
-            return;
-        }
-
 
  
