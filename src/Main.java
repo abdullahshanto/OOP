@@ -152,4 +152,17 @@ public class Main {
         }
     }
 
+    private static double readDouble() {
+        try {
+            double value = scanner.nextDouble();
+            scanner.nextLine();
+            return value;
+        } catch (InputMismatchException e) {
+            System.out.println("Error: Please enter a valid number.");
+            scanner.nextLine();
+            return Double.NaN;
+        }
+    }
+
+  
  
