@@ -196,13 +196,4 @@ public class Main {
         System.out.println("Full-time employee added.");
     }
 
-    private static void addPartTimeEmployee(PayrollSystem payrollSystem) {
-        System.out.print("Enter name: ");
-        String name = scanner.nextLine().trim();
-        if (name.isEmpty()) {
-            System.out.println("Error: Name cannot be empty.");
-            return;
-        }
-
-
  
