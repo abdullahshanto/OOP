@@ -214,5 +214,15 @@ public class Main {
             return;
         }
 
+        System.out.print("Enter hours worked: ");
+        int hoursWorked = readInt();
+        if (hoursWorked == -1) {
+            return;
+        }
+        if (hoursWorked < 0) {
+            System.out.println("Error: Hours worked cannot be negative.");
+            return;
+        }
 
+       
  
