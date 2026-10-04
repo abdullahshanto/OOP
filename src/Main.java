@@ -224,5 +224,18 @@ public class Main {
             return;
         }
 
-       
+        System.out.print("Enter hourly rate: ");
+        double hourlyRate = readDouble();
+        if (Double.isNaN(hourlyRate)) {
+            return;
+        }
+        if (hourlyRate < 0) {
+            System.out.println("Error: Hourly rate cannot be negative.");
+            return;
+        }
+
+        payrollSystem.addEmployee(new PartTimeEmployee(name, id, hoursWorked, hourlyRate));
+        System.out.println("Part-time employee added.");
+    }
+
  
